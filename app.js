@@ -34,8 +34,13 @@ const mockCoupons = [
 ];
 
 const els = {
+  authPage: document.getElementById("auth-page"),
+  couponPage: document.getElementById("coupon-page"),
   loadingPanel: document.getElementById("loading-panel"),
   loadingMessage: document.getElementById("loading-message"),
+  authFeedback: document.getElementById("auth-feedback"),
+  authFeedbackTitle: document.getElementById("auth-feedback-title"),
+  authFeedbackText: document.getElementById("auth-feedback-text"),
   profilePanel: document.getElementById("profile-panel"),
   displayName: document.getElementById("display-name"),
   displayMeta: document.getElementById("display-meta"),
@@ -55,6 +60,12 @@ const state = {
   memberSession: null,
 };
 
+function showPage(page) {
+  const isAuthPage = page === "auth";
+  els.authPage.classList.toggle("hidden", !isAuthPage);
+  els.couponPage.classList.toggle("hidden", isAuthPage);
+}
+
 function setLoading(message) {
   els.loadingMessage.textContent = message;
   els.loadingPanel.classList.remove("hidden");
@@ -70,6 +81,16 @@ function setStatus(target, text, mode) {
   if (mode) {
     target.classList.add(mode);
   }
+}
+
+function hideAuthFeedback() {
+  els.authFeedback.classList.add("hidden");
+}
+
+function showAuthFeedback(title, text) {
+  els.authFeedbackTitle.textContent = title;
+  els.authFeedbackText.textContent = text;
+  els.authFeedback.classList.remove("hidden");
 }
 
 function getStoredSession() {
@@ -157,17 +178,17 @@ function showProfile() {
 }
 
 function showMemberLogin() {
+  showPage("auth");
   hideLoading();
+  hideAuthFeedback();
   els.memberLoginPanel.classList.remove("hidden");
-  els.couponSection.classList.add("hidden");
-  showProfile();
   setStatus(els.memberStatus, "会員ログインが必要", "is-warn");
 }
 
 function showCoupons() {
+  showPage("coupon");
   hideLoading();
   els.memberLoginPanel.classList.add("hidden");
-  els.couponSection.classList.remove("hidden");
   showProfile();
   renderCoupons(state.memberSession?.coupons ?? []);
   setStatus(els.memberStatus, "会員連携済み", "is-ready");
@@ -207,6 +228,7 @@ async function initLiff() {
 
 async function bootstrap() {
   try {
+    showPage("auth");
     setLoading("LINE認証を確認しています…");
     await initLiff();
 
@@ -228,14 +250,15 @@ async function bootstrap() {
     showCoupons();
   } catch (error) {
     console.error(error);
+    showPage("auth");
     hideLoading();
     els.memberLoginPanel.classList.remove("hidden");
+    showAuthFeedback(
+      "設定確認が必要です",
+      error instanceof Error ? error.message : "不明なエラーが発生しました。",
+    );
     setStatus(els.lineStatus, "LINE設定エラー", "is-warn");
     setStatus(els.memberStatus, "デモモード", "is-warn");
-    els.displayName.textContent = "設定確認が必要です";
-    els.displayMeta.textContent =
-      error instanceof Error ? error.message : "不明なエラーが発生しました。";
-    els.profilePanel.classList.remove("hidden");
   }
 }
 
