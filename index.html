@@ -27,43 +27,16 @@
               </div>
             </div>
             <h1>マイクーポン</h1>
-            <p class="hero__lead">
-              LINEから起動し、必要に応じてベネフィット会員ログインを行ったうえで、
-              利用可能なクーポンをすぐに確認できる会員向けミニアプリです。
-            </p>
             <div class="status-row">
               <span class="status-pill" id="line-status">LINE未確認</span>
               <span class="status-pill" id="member-status">会員未確認</span>
             </div>
           </div>
-
-          <aside class="hero-card">
-            <p class="panel__label">起動フロー</p>
-            <ol class="flow-list">
-              <li>LINEミニアプリを起動</li>
-              <li>LINEログイン状態を自動判定</li>
-              <li>未連携ならベネフィット会員ログイン</li>
-              <li>マイクーポンを表示</li>
-            </ol>
-            <div class="hero-card__chips">
-              <span>会員連携</span>
-              <span>クーポン表示</span>
-              <span>LINEミニアプリ</span>
-            </div>
-          </aside>
         </div>
       </header>
 
       <main class="content">
-        <section class="app-page" id="auth-page">
-          <div class="page-heading">
-            <p class="page-heading__step">1ページ目</p>
-            <h2>会員認証</h2>
-            <p class="page-heading__lead">
-              LINEログイン後、ベネフィット会員との連携が未実施の場合のみ表示されます。
-            </p>
-          </div>
-
+        <section class="app-page app-page--auth" id="auth-page">
           <section class="panel loading-panel" id="loading-panel">
             <div class="spinner" aria-hidden="true"></div>
             <p id="loading-message">起動準備中です…</p>
@@ -71,10 +44,9 @@
 
           <section class="panel auth-panel hidden" id="member-login-panel">
             <div class="auth-panel__header">
-              <p class="panel__label">会員認証</p>
               <h2>ベネフィット会員ログイン</h2>
               <p class="panel__subtext">
-                未連携のユーザーのみ、このログインステップを経てマイクーポン画面に進みます。
+                会員IDとパスワードを入力してください。
               </p>
             </div>
 
@@ -118,7 +90,6 @@
 
         <section class="app-page hidden" id="coupon-page">
           <div class="page-heading">
-            <p class="page-heading__step">2ページ目</p>
             <h2>マイクーポン</h2>
             <p class="page-heading__lead">
               ログイン済みの会員に対して、利用可能な優待・クーポンを一覧で表示します。
