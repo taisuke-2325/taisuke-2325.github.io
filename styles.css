@@ -53,8 +53,8 @@ body {
 
 .hero__grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.8fr);
-  gap: 22px;
+  grid-template-columns: 1fr;
+  gap: 18px;
   align-items: stretch;
 }
 
@@ -102,44 +102,10 @@ body {
   font-size: clamp(32px, 7vw, 54px);
 }
 
-.hero__lead,
 .panel__subtext,
 .auth-note {
   color: var(--muted);
   line-height: 1.7;
-}
-
-.hero-card {
-  padding: 22px;
-  border-radius: 24px;
-  background:
-    linear-gradient(180deg, rgba(222, 81, 69, 0.08), rgba(222, 81, 69, 0.02)),
-    var(--surface-strong);
-  border: 1px solid rgba(222, 81, 69, 0.15);
-}
-
-.flow-list {
-  margin: 14px 0 18px;
-  padding-left: 20px;
-  color: var(--text);
-  line-height: 1.8;
-}
-
-.hero-card__chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.hero-card__chips span {
-  display: inline-flex;
-  padding: 9px 11px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(222, 81, 69, 0.16);
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--brand-dark);
 }
 
 .status-row {
@@ -188,6 +154,12 @@ body {
   gap: 18px;
 }
 
+.app-page--auth {
+  max-width: 560px;
+  margin: 0 auto;
+  width: 100%;
+}
+
 .page-heading {
   padding: 8px 4px 2px;
 }
@@ -197,15 +169,6 @@ body {
   font-size: clamp(28px, 4.8vw, 40px);
   line-height: 1.15;
   letter-spacing: -0.03em;
-}
-
-.page-heading__step {
-  margin: 0 0 10px;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--brand-dark);
 }
 
 .page-heading__lead {
