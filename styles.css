@@ -183,6 +183,38 @@ body {
   gap: 18px;
 }
 
+.app-page {
+  display: grid;
+  gap: 18px;
+}
+
+.page-heading {
+  padding: 8px 4px 2px;
+}
+
+.page-heading h2 {
+  margin: 0;
+  font-size: clamp(28px, 4.8vw, 40px);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+
+.page-heading__step {
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brand-dark);
+}
+
+.page-heading__lead {
+  margin: 10px 0 0;
+  max-width: 680px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
 .panel,
 .coupon-card {
   background: var(--surface);
@@ -226,6 +258,27 @@ body {
 
 .auth-panel__header {
   margin-bottom: 20px;
+}
+
+.auth-feedback {
+  margin-bottom: 18px;
+  padding: 16px 18px;
+  border-radius: var(--radius-sm);
+  background: #fff5e8;
+  border: 1px solid rgba(158, 95, 28, 0.2);
+}
+
+.auth-feedback__title {
+  margin: 0 0 6px;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--warning);
+}
+
+.auth-feedback__text {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
 }
 
 .login-form {
