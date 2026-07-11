@@ -6,7 +6,7 @@
     <title>ベネフィット・ステーション | マイクーポン</title>
     <meta
       name="description"
-      content="LINEミニアプリのデモです。LINEログインとベネフィット会員ログイン後にマイクーポンを表示します。"
+      content="LINEログインとベネフィット会員ログイン後に、マイクーポンを表示するLINEミニアプリです。"
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
@@ -22,14 +22,14 @@
                 alt="ベネフィット・ワン"
               />
               <div>
-                <p class="hero__eyebrow">Benefit Station Mini App Demo</p>
+                <p class="hero__eyebrow">Benefit Station Mini App</p>
                 <p class="brand-lockup__service">ベネフィット・ステーション</p>
               </div>
             </div>
             <h1>マイクーポン</h1>
             <p class="hero__lead">
               LINEから起動し、必要に応じてベネフィット会員ログインを行ったうえで、
-              利用可能なクーポンをすぐに表示するミニアプリの提案デモです。
+              利用可能なクーポンをすぐに確認できる会員向けミニアプリです。
             </p>
             <div class="status-row">
               <span class="status-pill" id="line-status">LINE未確認</span>
@@ -80,7 +80,7 @@
 
             <div class="auth-feedback hidden" id="auth-feedback">
               <p class="auth-feedback__title" id="auth-feedback-title">
-                設定確認が必要です
+                ログイン情報を確認してください
               </p>
               <p class="auth-feedback__text" id="auth-feedback-text">
                 認証状態を確認しています。
@@ -93,7 +93,7 @@
                 <input
                   type="text"
                   name="memberId"
-                  placeholder="demo-member"
+                  placeholder="会員IDを入力"
                   autocomplete="username"
                   required
                 />
@@ -103,14 +103,14 @@
                 <input
                   type="password"
                   name="password"
-                  placeholder="password"
+                  placeholder="パスワードを入力"
                   autocomplete="current-password"
                   required
                 />
               </label>
               <button class="primary-btn" type="submit">ログインして次へ</button>
               <p class="auth-note">
-                デモ用のため任意の値でログインできます。実運用では会員APIに差し替えます。
+                ご登録の会員IDとパスワードを入力すると、マイクーポンをご確認いただけます。
               </p>
             </form>
           </section>
@@ -135,7 +135,7 @@
             </div>
             <div class="panel__actions">
               <button class="secondary-btn" id="reset-demo-btn" type="button">
-                デモをリセット
+                ログイン情報をリセット
               </button>
             </div>
           </section>
