@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ベネフィット・ステーション | マイクーポン</title>
+    <meta
+      name="description"
+      content="LINEミニアプリのデモです。LINEログインとベネフィット会員ログイン後にマイクーポンを表示します。"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero">
+        <div class="hero__grid">
+          <div class="hero__main">
+            <div class="brand-lockup">
+              <img
+                class="brand-lockup__logo"
+                src="https://corp.benefit-one.co.jp/files/img/common/logo.svg"
+                alt="ベネフィット・ワン"
+              />
+              <div>
+                <p class="hero__eyebrow">Benefit Station Mini App Demo</p>
+                <p class="brand-lockup__service">ベネフィット・ステーション</p>
+              </div>
+            </div>
+            <h1>マイクーポン</h1>
+            <p class="hero__lead">
+              LINEから起動し、必要に応じてベネフィット会員ログインを行ったうえで、
+              利用可能なクーポンをすぐに表示するミニアプリの提案デモです。
+            </p>
+            <div class="status-row">
+              <span class="status-pill" id="line-status">LINE未確認</span>
+              <span class="status-pill" id="member-status">会員未確認</span>
+            </div>
+          </div>
+
+          <aside class="hero-card">
+            <p class="panel__label">起動フロー</p>
+            <ol class="flow-list">
+              <li>LINEミニアプリを起動</li>
+              <li>LINEログイン状態を自動判定</li>
+              <li>未連携ならベネフィット会員ログイン</li>
+              <li>マイクーポンを表示</li>
+            </ol>
+            <div class="hero-card__chips">
+              <span>会員連携</span>
+              <span>クーポン表示</span>
+              <span>LINEミニアプリ</span>
+            </div>
+          </aside>
+        </div>
+      </header>
+
+      <main class="content">
+        <section class="panel profile-panel hidden" id="profile-panel">
+          <div>
+            <p class="panel__label">利用者</p>
+            <h2 id="display-name">ゲスト</h2>
+            <p class="panel__subtext" id="display-meta">
+              LINEプロフィールと会員情報を読み込みます
+            </p>
+          </div>
+          <div class="panel__actions">
+            <button class="secondary-btn" id="reset-demo-btn" type="button">
+              デモをリセット
+            </button>
+          </div>
+        </section>
+
+        <section class="panel loading-panel" id="loading-panel">
+          <div class="spinner" aria-hidden="true"></div>
+          <p id="loading-message">起動準備中です…</p>
+        </section>
+
+        <section class="panel auth-panel hidden" id="member-login-panel">
+          <div class="auth-panel__header">
+            <p class="panel__label">会員認証</p>
+            <h2>ベネフィット会員ログイン</h2>
+            <p class="panel__subtext">
+              LINEログイン後、会員連携が未実施の場合に表示される想定です。
+            </p>
+          </div>
+
+          <form id="member-login-form" class="login-form">
+            <label class="field">
+              <span>会員ID</span>
+              <input
+                type="text"
+                name="memberId"
+                placeholder="demo-member"
+                autocomplete="username"
+                required
+              />
+            </label>
+            <label class="field">
+              <span>パスワード</span>
+              <input
+                type="password"
+                name="password"
+                placeholder="password"
+                autocomplete="current-password"
+                required
+              />
+            </label>
+            <button class="primary-btn" type="submit">会員ログイン</button>
+            <p class="auth-note">
+              デモ用のため任意の値でログインできます。実運用では会員APIに差し替えます。
+            </p>
+          </form>
+        </section>
+
+        <section class="coupon-section hidden" id="coupon-section">
+          <div class="section-heading">
+            <div>
+              <p class="panel__label">My Coupons</p>
+              <h2>あなた向けのクーポン</h2>
+              <p class="section-heading__lead">
+                会員ランクと利用履歴をもとに、おすすめ優待をまとめて確認できます。
+              </p>
+            </div>
+            <div class="coupon-summary">
+              <span id="coupon-count">0件</span>
+              <span>利用可能</span>
+            </div>
+          </div>
+
+          <div class="coupon-grid" id="coupon-grid"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script src="./config.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
