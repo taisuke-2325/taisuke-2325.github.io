@@ -1,5 +1,5 @@
 window.APP_CONFIG = {
-  liffId: "REPLACE_WITH_YOUR_LIFF_ID",
+  liffId: "2010580007-SRzHV1uF",
   benefitOneLoginUrl: "/",
   storageKey: "benefit-one-demo-session",
 };
