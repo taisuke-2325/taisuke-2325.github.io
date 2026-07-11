@@ -93,6 +93,19 @@ function showAuthFeedback(title, text) {
   els.authFeedback.classList.remove("hidden");
 }
 
+function getReadableAuthError(error) {
+  if (!(error instanceof Error)) {
+    return "時間をおいて再度お試しください。";
+  }
+  if (error.message.includes("LIFF SDK")) {
+    return "LINEの起動状態を確認のうえ、再度お試しください。";
+  }
+  if (error.message.includes("LIFF ID") || error.message.includes("config.js")) {
+    return "現在メンテナンス中のため、時間をおいて再度お試しください。";
+  }
+  return "時間をおいて再度お試しください。";
+}
+
 function getStoredSession() {
   try {
     const raw = window.localStorage.getItem(window.APP_CONFIG.storageKey);
@@ -254,11 +267,11 @@ async function bootstrap() {
     hideLoading();
     els.memberLoginPanel.classList.remove("hidden");
     showAuthFeedback(
-      "設定確認が必要です",
-      error instanceof Error ? error.message : "不明なエラーが発生しました。",
+      "ログインを完了できませんでした",
+      getReadableAuthError(error),
     );
     setStatus(els.lineStatus, "LINE設定エラー", "is-warn");
-    setStatus(els.memberStatus, "デモモード", "is-warn");
+    setStatus(els.memberStatus, "確認が必要", "is-warn");
   }
 }
 
