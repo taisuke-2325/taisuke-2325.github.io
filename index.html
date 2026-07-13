@@ -6,7 +6,7 @@
     <title>ベネフィット・ステーション | マイクーポン</title>
     <meta
       name="description"
-      content="LINEログインとベネフィット会員ログイン後に、マイクーポンを表示するLINEミニアプリです。"
+      content="LINEログイン風の導線から、マイクーポンを表示するLINEミニアプリデモです。"
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
@@ -37,54 +37,27 @@
 
       <main class="content">
         <section class="app-page app-page--auth" id="auth-page">
-          <section class="panel loading-panel" id="loading-panel">
+          <section class="panel loading-panel hidden" id="loading-panel">
             <div class="spinner" aria-hidden="true"></div>
             <p id="loading-message">起動準備中です…</p>
           </section>
 
-          <section class="panel auth-panel hidden" id="member-login-panel">
+          <section class="panel auth-panel" id="line-login-panel">
             <div class="auth-panel__header">
-              <h2>ベネフィット会員ログイン</h2>
+              <h2>LINEログイン</h2>
               <p class="panel__subtext">
-                会員IDとパスワードを入力してください。
+                LINEアカウントでログインすると、マイクーポンをご確認いただけます。
               </p>
             </div>
 
-            <div class="auth-feedback hidden" id="auth-feedback">
-              <p class="auth-feedback__title" id="auth-feedback-title">
-                ログイン情報を確認してください
-              </p>
-              <p class="auth-feedback__text" id="auth-feedback-text">
-                認証状態を確認しています。
-              </p>
-            </div>
-
-            <form id="member-login-form" class="login-form">
-              <label class="field">
-                <span>会員ID</span>
-                <input
-                  type="text"
-                  name="memberId"
-                  placeholder="会員IDを入力"
-                  autocomplete="username"
-                  required
-                />
-              </label>
-              <label class="field">
-                <span>パスワード</span>
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="パスワードを入力"
-                  autocomplete="current-password"
-                  required
-                />
-              </label>
-              <button class="primary-btn" type="submit">ログインして次へ</button>
+            <div class="login-form">
+              <button class="primary-btn" id="line-login-button" type="button">
+                LINEでログイン
+              </button>
               <p class="auth-note">
-                ご登録の会員IDとパスワードを入力すると、マイクーポンをご確認いただけます。
+                ボタン押下後、そのままクーポン一覧へ遷移します。
               </p>
-            </form>
+            </div>
           </section>
         </section>
 
@@ -92,16 +65,16 @@
           <div class="page-heading">
             <h2>マイクーポン</h2>
             <p class="page-heading__lead">
-              ログイン済みの会員に対して、利用可能な優待・クーポンを一覧で表示します。
+              LINEログイン済みのユーザーに対して、利用可能な優待・クーポンを一覧で表示します。
             </p>
           </div>
 
           <section class="panel profile-panel" id="profile-panel">
             <div>
               <p class="panel__label">利用者</p>
-              <h2 id="display-name">ゲスト</h2>
+              <h2 id="display-name">LINEユーザー</h2>
               <p class="panel__subtext" id="display-meta">
-                LINEプロフィールと会員情報を読み込みます
+                LINEログイン確認後に表示します
               </p>
             </div>
             <div class="panel__actions">
@@ -131,8 +104,6 @@
         </section>
       </main>
     </div>
-
-    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <script src="./config.js"></script>
     <script src="./app.js"></script>
   </body>
