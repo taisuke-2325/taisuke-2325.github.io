@@ -6,6 +6,8 @@ const mockCoupons = [
     description: "土日利用も対象。2名まで同時利用できます。",
     expiresAt: "2026/09/30",
     category: "エンタメ",
+    code: "4938 2100 5001",
+    note: "入場時にスタッフへご提示ください",
   },
   {
     id: "cpn-002",
@@ -14,6 +16,8 @@ const mockCoupons = [
     description: "全国の対象ホテルで使える会員限定クーポンです。",
     expiresAt: "2026/10/15",
     category: "旅行",
+    code: "7712 6015 8824",
+    note: "予約時にクーポンコードをご入力ください",
   },
   {
     id: "cpn-003",
@@ -22,6 +26,8 @@ const mockCoupons = [
     description: "対象エリア限定。税込2,000円以上の注文で利用可能です。",
     expiresAt: "2026/08/31",
     category: "グルメ",
+    code: "1200 8844 3201",
+    note: "注文確認画面で自動適用されます",
   },
   {
     id: "cpn-004",
@@ -30,6 +36,8 @@ const mockCoupons = [
     description: "平日夜の利用におすすめの福利厚生クーポンです。",
     expiresAt: "2026/11/30",
     category: "レジャー",
+    code: "3040 7731 1108",
+    note: "受付時にバーコードをご提示ください",
   },
 ];
 
@@ -78,6 +86,16 @@ function setStatus(target, text, mode) {
   }
 }
 
+function getBarcodeMarkup(seed) {
+  const safeSeed = escapeHtml(seed);
+  return `
+    <div class="coupon-barcode" aria-hidden="true">
+      <span class="coupon-barcode__bars"></span>
+    </div>
+    <p class="coupon-barcode__code">${safeSeed}</p>
+  `;
+}
+
 function renderCoupons(coupons) {
   if (!coupons.length) {
     els.couponGrid.innerHTML =
@@ -102,6 +120,15 @@ function renderCoupons(coupons) {
               <span>ID: ${escapeHtml(coupon.id)}</span>
             </div>
             <p>${escapeHtml(coupon.description)}</p>
+            <div class="coupon-card__ticket">
+              <div class="coupon-card__barcode-wrap">
+                ${getBarcodeMarkup(coupon.code || coupon.id)}
+              </div>
+              <div class="coupon-card__footer">
+                <p class="coupon-card__note">${escapeHtml(coupon.note || "ご利用時にご提示ください")}</p>
+                <button class="coupon-card__action" type="button">クーポンを利用する</button>
+              </div>
+            </div>
           </div>
         </article>
       `,
