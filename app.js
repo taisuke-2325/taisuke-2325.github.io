@@ -38,26 +38,21 @@ const els = {
   couponPage: document.getElementById("coupon-page"),
   loadingPanel: document.getElementById("loading-panel"),
   loadingMessage: document.getElementById("loading-message"),
-  authFeedback: document.getElementById("auth-feedback"),
-  authFeedbackTitle: document.getElementById("auth-feedback-title"),
-  authFeedbackText: document.getElementById("auth-feedback-text"),
   profilePanel: document.getElementById("profile-panel"),
   displayName: document.getElementById("display-name"),
   displayMeta: document.getElementById("display-meta"),
   lineStatus: document.getElementById("line-status"),
   memberStatus: document.getElementById("member-status"),
-  memberLoginPanel: document.getElementById("member-login-panel"),
-  memberLoginForm: document.getElementById("member-login-form"),
-  couponSection: document.getElementById("coupon-section"),
+  lineLoginPanel: document.getElementById("line-login-panel"),
+  lineLoginButton: document.getElementById("line-login-button"),
   couponGrid: document.getElementById("coupon-grid"),
   couponCount: document.getElementById("coupon-count"),
   resetDemoBtn: document.getElementById("reset-demo-btn"),
 };
 
 const state = {
-  liffProfile: null,
-  lineUserId: null,
-  memberSession: null,
+  isLineLoggedIn: false,
+  displayName: "LINEユーザー",
 };
 
 function showPage(page) {
@@ -81,60 +76,6 @@ function setStatus(target, text, mode) {
   if (mode) {
     target.classList.add(mode);
   }
-}
-
-function hideAuthFeedback() {
-  els.authFeedback.classList.add("hidden");
-}
-
-function showAuthFeedback(title, text) {
-  els.authFeedbackTitle.textContent = title;
-  els.authFeedbackText.textContent = text;
-  els.authFeedback.classList.remove("hidden");
-}
-
-function getReadableAuthError(error) {
-  if (!(error instanceof Error)) {
-    return "時間をおいて再度お試しください。";
-  }
-  if (error.message.includes("LIFF SDK")) {
-    return "LINEの起動状態を確認のうえ、再度お試しください。";
-  }
-  if (error.message.includes("LIFF ID") || error.message.includes("config.js")) {
-    return "現在メンテナンス中のため、時間をおいて再度お試しください。";
-  }
-  return "時間をおいて再度お試しください。";
-}
-
-function getStoredSession() {
-  try {
-    const raw = window.localStorage.getItem(window.APP_CONFIG.storageKey);
-    return raw ? JSON.parse(raw) : null;
-  } catch (error) {
-    return null;
-  }
-}
-
-function saveSession(session) {
-  window.localStorage.setItem(
-    window.APP_CONFIG.storageKey,
-    JSON.stringify(session),
-  );
-}
-
-function clearSession() {
-  window.localStorage.removeItem(window.APP_CONFIG.storageKey);
-}
-
-function buildMemberSession(formValues) {
-  return {
-    linkedLineUserId: state.lineUserId,
-    memberId: formValues.memberId,
-    memberName: "ベネフィット会員",
-    organization: "Benefit Station",
-    loginAt: new Date().toISOString(),
-    coupons: mockCoupons,
-  };
 }
 
 function renderCoupons(coupons) {
@@ -178,126 +119,46 @@ function escapeHtml(value) {
 }
 
 function showProfile() {
-  const displayName =
-    state.memberSession?.memberName || state.liffProfile?.displayName || "ゲスト";
-  const lineIdText = state.lineUserId ? `LINE User ID: ${state.lineUserId}` : "LINE未取得";
-  const memberIdText = state.memberSession?.memberId
-    ? `会員ID: ${state.memberSession.memberId}`
-    : "会員未連携";
-
-  els.displayName.textContent = displayName;
-  els.displayMeta.textContent = `${lineIdText} / ${memberIdText}`;
+  els.displayName.textContent = state.displayName;
+  els.displayMeta.textContent = "LINEログイン確認済み";
   els.profilePanel.classList.remove("hidden");
 }
 
-function showMemberLogin() {
+function showLoginScreen() {
   showPage("auth");
   hideLoading();
-  hideAuthFeedback();
-  els.memberLoginPanel.classList.remove("hidden");
-  setStatus(els.memberStatus, "会員ログインが必要", "is-warn");
+  els.lineLoginPanel.classList.remove("hidden");
+  setStatus(els.lineStatus, "LINE未ログイン", "is-warn");
+  setStatus(els.memberStatus, "クーポン未表示", "is-warn");
 }
 
 function showCoupons() {
   showPage("coupon");
   hideLoading();
-  els.memberLoginPanel.classList.add("hidden");
+  els.lineLoginPanel.classList.add("hidden");
   showProfile();
-  renderCoupons(state.memberSession?.coupons ?? []);
-  setStatus(els.memberStatus, "会員連携済み", "is-ready");
-}
-
-function isSessionValidForCurrentLineUser(session) {
-  if (!session || !state.lineUserId) {
-    return false;
-  }
-  return session.linkedLineUserId === state.lineUserId;
-}
-
-async function initLiff() {
-  if (!window.liff) {
-    throw new Error("LIFF SDKを読み込めませんでした。");
-  }
-  if (!window.APP_CONFIG?.liffId || window.APP_CONFIG.liffId === "REPLACE_WITH_YOUR_LIFF_ID") {
-    throw new Error("config.js に LIFF ID を設定してください。");
-  }
-
-  await liff.init({
-    liffId: window.APP_CONFIG.liffId,
-    withLoginOnExternalBrowser: true,
-  });
-
-  if (!liff.isLoggedIn()) {
-    setLoading("LINEログインに移動します…");
-    liff.login();
-    return;
-  }
-
-  const profile = await liff.getProfile();
-  state.liffProfile = profile;
-  state.lineUserId = profile.userId;
+  renderCoupons(mockCoupons);
   setStatus(els.lineStatus, "LINEログイン済み", "is-ready");
+  setStatus(els.memberStatus, "クーポン表示中", "is-ready");
 }
 
-async function bootstrap() {
-  try {
-    showPage("auth");
-    setLoading("LINE認証を確認しています…");
-    await initLiff();
-
-    if (!state.lineUserId) {
-      return;
-    }
-
-    state.memberSession = getStoredSession();
-    if (!isSessionValidForCurrentLineUser(state.memberSession)) {
-      state.memberSession = null;
-      clearSession();
-    }
-
-    if (!state.memberSession) {
-      showMemberLogin();
-      return;
-    }
-
-    showCoupons();
-  } catch (error) {
-    console.error(error);
-    showPage("auth");
-    hideLoading();
-    els.memberLoginPanel.classList.remove("hidden");
-    showAuthFeedback(
-      "ログインを完了できませんでした",
-      getReadableAuthError(error),
-    );
-    setStatus(els.lineStatus, "LINE設定エラー", "is-warn");
-    setStatus(els.memberStatus, "確認が必要", "is-warn");
-  }
-}
-
-els.memberLoginForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const formData = new FormData(els.memberLoginForm);
-  const memberId = String(formData.get("memberId") || "").trim();
-  const password = String(formData.get("password") || "").trim();
-
-  if (!memberId || !password) {
-    return;
-  }
-
-  setLoading("会員情報を連携しています…");
-  els.memberLoginPanel.classList.add("hidden");
+function simulateLineLogin() {
+  els.lineLoginPanel.classList.add("hidden");
+  setLoading("LINEログインを確認しています…");
 
   window.setTimeout(() => {
-    state.memberSession = buildMemberSession({ memberId, password });
-    saveSession(state.memberSession);
+    state.isLineLoggedIn = true;
     showCoupons();
-  }, 600);
+  }, 450);
+}
+
+els.lineLoginButton.addEventListener("click", () => {
+  simulateLineLogin();
 });
 
 els.resetDemoBtn.addEventListener("click", () => {
-  clearSession();
-  window.location.reload();
+  state.isLineLoggedIn = false;
+  showLoginScreen();
 });
 
-bootstrap();
+showLoginScreen();
